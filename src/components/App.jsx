@@ -1,13 +1,23 @@
 import { Component } from 'react';
+import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css';
 import { Searchbar } from './Searchbar/Searchbar';
 import { ImageGallery } from './ImageGallery/ImageGallery';
 import { ServiceAPI } from './Api';
+import { Loader } from './Loader/Loader';
+import { Modals } from './Modal/Modal';
 
 export class App extends Component {
   state = {
     text: '',
     images: [],
     page: 1,
+    loader: false,
+    showModal: false,
+    modalImg: '',
+  };
+
+  toggleModal = img => {
+    this.setState(prev => ({ showModal: !prev.showModal, modalImg: img }));
   };
 
   onSearchText = text => {
@@ -15,6 +25,13 @@ export class App extends Component {
   };
 
   componentDidUpdate(prevProps, prevState) {
+    if (prevState.text !== this.state.text) {
+      this.setState({
+        loader: true,
+        page: 1,
+        images: [],
+      });
+    }
     if (
       prevState.text !== this.state.text ||
       this.state.page !== prevState.page
@@ -23,6 +40,7 @@ export class App extends Component {
         this.setState(prevState => {
           return {
             images: [...prevState.images, ...data],
+            loader: false,
           };
         })
       );
@@ -34,16 +52,24 @@ export class App extends Component {
       page: prevState.page + 1,
     }));
   };
-
   render() {
     return (
       <div>
+        {this.state.showModal && (
+          <Modals
+            img={this.state.modalImg}
+            alt={'asdasd'}
+            closeModal={this.toggleModal}
+          />
+        )}
+        {this.state.loader && <Loader />}
         <Searchbar onSubmit={this.onSearchText} />
-
         {this.state.images.length > 0 ? (
-          <ImageGallery data={this.state.images} />
+          <ImageGallery
+            data={this.state.images}
+            toggleModal={this.toggleModal}
+          />
         ) : null}
-
         <button
           type="button"
           onClick={() => {
