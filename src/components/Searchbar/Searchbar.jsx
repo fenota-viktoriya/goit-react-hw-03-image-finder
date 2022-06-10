@@ -20,6 +20,7 @@ export class Searchbar extends Component {
 
     const state = this.state;
     onSubmit(state);
+    this.setState({ text: '' });
   };
 
   handelInputChange = e => {

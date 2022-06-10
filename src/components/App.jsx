@@ -17,7 +17,10 @@ export class App extends Component {
   };
 
   toggleModal = img => {
-    this.setState(prev => ({ showModal: !prev.showModal, modalImg: img }));
+    this.setState(prev => ({
+      showModal: !prev.showModal,
+      modalImg: img,
+    }));
   };
 
   onSearchText = text => {
@@ -30,6 +33,7 @@ export class App extends Component {
         loader: true,
         page: 1,
         images: [],
+        modalImg: '',
       });
     }
     if (
@@ -63,13 +67,16 @@ export class App extends Component {
           />
         )}
         {this.state.loader && <Loader />}
+
         <Searchbar onSubmit={this.onSearchText} />
+
         {this.state.images.length > 0 ? (
           <ImageGallery
             data={this.state.images}
             toggleModal={this.toggleModal}
           />
         ) : null}
+
         <button
           type="button"
           onClick={() => {
