@@ -1,11 +1,12 @@
 import { PureComponent } from 'react';
 import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css';
+import { createPortal } from 'react-dom';
 import { Searchbar } from './Searchbar/Searchbar';
 import { ImageGallery } from './ImageGallery/ImageGallery';
 import { ServiceAPI } from './Api';
 import { Loader } from './Loader/Loader';
 import { Modals } from './Modal/Modal';
-
+const modalRoot = document.querySelector('#modal-root');
 export class App extends PureComponent {
   state = {
     text: '',
@@ -62,13 +63,15 @@ export class App extends PureComponent {
   render() {
     return (
       <div>
-        {this.state.showModal && (
-          <Modals
-            img={this.state.modalImg}
-            alt={this.state.tags}
-            closeModal={this.toggleModal}
-          />
-        )}
+        {this.state.showModal &&
+          createPortal(
+            <Modals
+              img={this.state.modalImg}
+              alt={this.state.tags}
+              closeModal={this.toggleModal}
+            />,
+            modalRoot
+          )}
         {this.state.loader && <Loader />}
 
         <Searchbar onSubmit={this.onSearchText} />

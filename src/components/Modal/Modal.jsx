@@ -1,7 +1,5 @@
 import { Overlay, Modal } from './Modal.styled';
 import { PureComponent } from 'react';
-import { createPortal } from 'react-dom';
-const modalRoot = document.querySelector('#modal-root');
 const body = document.querySelector('body');
 
 export class Modals extends PureComponent {
