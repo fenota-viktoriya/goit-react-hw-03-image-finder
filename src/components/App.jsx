@@ -1,4 +1,4 @@
-import { Component } from 'react';
+import { PureComponent } from 'react';
 import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css';
 import { Searchbar } from './Searchbar/Searchbar';
 import { ImageGallery } from './ImageGallery/ImageGallery';
@@ -6,7 +6,7 @@ import { ServiceAPI } from './Api';
 import { Loader } from './Loader/Loader';
 import { Modals } from './Modal/Modal';
 
-export class App extends Component {
+export class App extends PureComponent {
   state = {
     text: '',
     images: [],
@@ -14,12 +14,14 @@ export class App extends Component {
     loader: false,
     showModal: false,
     modalImg: '',
+    tags: '',
   };
 
-  toggleModal = img => {
+  toggleModal = (img, tags) => {
     this.setState(prev => ({
       showModal: !prev.showModal,
       modalImg: img,
+      tags: tags,
     }));
   };
 
@@ -34,6 +36,7 @@ export class App extends Component {
         page: 1,
         images: [],
         modalImg: '',
+        tags: '',
       });
     }
     if (
@@ -62,7 +65,7 @@ export class App extends Component {
         {this.state.showModal && (
           <Modals
             img={this.state.modalImg}
-            alt={'asdasd'}
+            alt={this.state.tags}
             closeModal={this.toggleModal}
           />
         )}
@@ -77,14 +80,16 @@ export class App extends Component {
           />
         ) : null}
 
-        <button
-          type="button"
-          onClick={() => {
-            this.getNextPage();
-          }}
-        >
-          next
-        </button>
+        {this.state.images.length > 1 && (
+          <button
+            type="button"
+            onClick={() => {
+              this.getNextPage();
+            }}
+          >
+            next
+          </button>
+        )}
       </div>
     );
   }

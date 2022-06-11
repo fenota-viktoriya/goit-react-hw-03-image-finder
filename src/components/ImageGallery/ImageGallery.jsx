@@ -11,7 +11,7 @@ export function ImageGallery({ data, toggleModal }) {
             toggleModal={toggleModal}
             img={webformatURL}
             largeImg={largeImageURL}
-            tag={tags}
+            tags={tags}
             id={id}
             key={`${id}`}
           />

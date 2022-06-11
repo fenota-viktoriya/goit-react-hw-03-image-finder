@@ -1,10 +1,10 @@
 import { Overlay, Modal } from './Modal.styled';
-import { Component } from 'react';
-//import { createPortal } from 'react-dom';
-//const modalRoot = document.querySelector('#modal-root');
+import { PureComponent } from 'react';
+import { createPortal } from 'react-dom';
+const modalRoot = document.querySelector('#modal-root');
 const body = document.querySelector('body');
 
-export class Modals extends Component {
+export class Modals extends PureComponent {
   componentDidMount() {
     window.addEventListener('keydown', this.props.closeModal);
     body.classList.add('scroll');
@@ -14,11 +14,11 @@ export class Modals extends Component {
     body.classList.remove('scroll');
   }
   render() {
-    const { alt, img, closeModal } = this.props;
+    const { tags, img, closeModal } = this.props;
 
     return (
       <Overlay onClick={closeModal}>
-        <Modal src={`${img}`} alt={`${alt}`} />
+        <Modal src={`${img}`} alt={`${tags}`} />
       </Overlay>
     );
   }

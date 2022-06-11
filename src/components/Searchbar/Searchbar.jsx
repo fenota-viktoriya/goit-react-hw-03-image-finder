@@ -1,4 +1,4 @@
-import { Component } from 'react';
+import { PureComponent } from 'react';
 import { FcSearch } from 'react-icons/fc';
 import {
   Header,
@@ -7,7 +7,7 @@ import {
   InputSearch,
 } from './Searchbar.styled';
 
-export class Searchbar extends Component {
+export class Searchbar extends PureComponent {
   state = { text: '' };
 
   onSubmitForm = e => {
