@@ -85,7 +85,7 @@ export class App extends PureComponent {
 
         {loader && <Loader />}
 
-        {images.length > 1 && <ButtonNext getNextPage={this.getNextPage} />}
+        {images.length > 11 && <ButtonNext getNextPage={this.getNextPage} />}
       </Container>
     );
   }
