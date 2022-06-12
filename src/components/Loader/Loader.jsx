@@ -4,7 +4,6 @@ import { LoaderContainer } from './Loader.styled';
 export function Loader() {
   return (
     <LoaderContainer>
-      {' '}
       <SpinnerCircular
         size={80}
         thickness={121}

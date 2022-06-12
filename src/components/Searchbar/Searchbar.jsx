@@ -1,4 +1,5 @@
 import { PureComponent } from 'react';
+import PropTypes from 'prop-types';
 import { FcSearch } from 'react-icons/fc';
 import {
   Header,
@@ -47,3 +48,7 @@ export class Searchbar extends PureComponent {
     );
   }
 }
+
+Searchbar.propTypes = {
+  onSubmit: PropTypes.func.isRequired,
+};

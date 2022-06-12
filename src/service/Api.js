@@ -1,4 +1,5 @@
 import axios from 'axios';
+import PropTypes from 'prop-types';
 
 axios.defaults.baseURL = 'https://pixabay.com/api/';
 axios.defaults.params = {
@@ -17,3 +18,7 @@ export async function ServiceAPI(q, page) {
     console.error(error);
   }
 }
+ServiceAPI.propTypes = {
+  q: PropTypes.string.isRequired,
+  page: PropTypes.number.isRequired,
+};

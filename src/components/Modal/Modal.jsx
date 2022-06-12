@@ -1,15 +1,17 @@
-import { Overlay, Modal } from './Modal.styled';
 import { PureComponent } from 'react';
-const body = document.querySelector('body');
+import PropTypes from 'prop-types';
+import { Overlay, Modal } from './Modal.styled';
 
 export class Modals extends PureComponent {
   componentDidMount() {
-    window.addEventListener('keydown', this.props.closeModal);
-    body.classList.add('scroll');
+    const { closeModal } = this.props;
+    window.addEventListener('keydown', closeModal);
+    document.body.classList.add('scroll');
   }
   componentWillUnmount() {
-    window.removeEventListener('keydown', this.props.closeModal);
-    body.classList.remove('scroll');
+    const { closeModal } = this.props;
+    window.removeEventListener('keydown', closeModal);
+    document.body.classList.remove('scroll');
   }
   render() {
     const { tags, img, closeModal } = this.props;
@@ -21,3 +23,7 @@ export class Modals extends PureComponent {
     );
   }
 }
+
+Modals.propTypes = {
+  closeModal: PropTypes.func.isRequired,
+};

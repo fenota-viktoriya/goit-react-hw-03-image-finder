@@ -2,13 +2,15 @@ import { PureComponent } from 'react';
 import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css';
 import { createPortal } from 'react-dom';
 import { Container } from './App.styled';
-import { Searchbar } from '../Searchbar/Searchbar';
-import { ImageGallery } from '../ImageGallery/ImageGallery';
-import { ServiceAPI } from '../Api';
-import { Loader } from '../Loader/Loader';
-import { Modals } from '../Modal/Modal';
-import { ButtonNext } from 'components/Button/Button';
+import { Searchbar } from '../Searchbar';
+import { ImageGallery } from '../ImageGallery';
+import { ServiceAPI } from '../../service/Api';
+import { Loader } from '../Loader';
+import { Modals } from '../Modal';
+import { ButtonNext } from '../Button';
+
 const modalRoot = document.querySelector('#modal-root');
+
 export class App extends PureComponent {
   state = {
     text: '',
@@ -19,6 +21,33 @@ export class App extends PureComponent {
     modalImg: '',
     tags: '',
   };
+
+  componentDidUpdate(prevProps, prevState) {
+    const { text, page } = this.state;
+    if (prevState.text !== text) {
+      this.setState({
+        page: 1,
+        images: [],
+        modalImg: '',
+        tags: '',
+      });
+    }
+    if (prevState.text !== text || page !== prevState.page) {
+      this.setState({ loader: true });
+      ServiceAPI(text, page).then(data => {
+        if (data.length < 1) {
+          alert('opps, ничего не найдено!');
+        }
+
+        this.setState(prevState => {
+          return {
+            images: [...prevState.images, ...data],
+            loader: false,
+          };
+        });
+      });
+    }
+  }
 
   toggleModal = (img, tags) => {
     this.setState(prev => ({
@@ -32,65 +61,31 @@ export class App extends PureComponent {
     this.setState(text);
   };
 
-  componentDidUpdate(prevProps, prevState) {
-    if (prevState.text !== this.state.text) {
-      this.setState({
-        page: 1,
-        images: [],
-        modalImg: '',
-        tags: '',
-      });
-    }
-    if (
-      prevState.text !== this.state.text ||
-      this.state.page !== prevState.page
-    ) {
-      this.setState({ loader: true });
-      ServiceAPI(this.state.text, this.state.page).then(data => {
-        if (data.length < 1) {
-          alert('opps!');
-        }
-
-        this.setState(prevState => {
-          return {
-            images: [...prevState.images, ...data],
-            loader: false,
-          };
-        });
-      });
-    }
-  }
-
   getNextPage = () => {
     this.setState(prevState => ({
       page: prevState.page + 1,
     }));
   };
+
   render() {
+    const { modalImg, showModal, tags, images, loader } = this.state;
     return (
       <Container>
-        {this.state.showModal &&
+        {showModal &&
           createPortal(
-            <Modals
-              img={this.state.modalImg}
-              alt={this.state.tags}
-              closeModal={this.toggleModal}
-            />,
+            <Modals img={modalImg} alt={tags} closeModal={this.toggleModal} />,
             modalRoot
           )}
 
         <Searchbar onSubmit={this.onSearchText} />
 
-        {this.state.images.length > 0 ? (
-          <ImageGallery
-            data={this.state.images}
-            toggleModal={this.toggleModal}
-          />
+        {images.length > 0 ? (
+          <ImageGallery data={images} toggleModal={this.toggleModal} />
         ) : null}
-        {this.state.loader && <Loader />}
-        {this.state.images.length > 1 && (
-          <ButtonNext getNextPage={this.getNextPage} />
-        )}
+
+        {loader && <Loader />}
+
+        {images.length > 1 && <ButtonNext getNextPage={this.getNextPage} />}
       </Container>
     );
   }

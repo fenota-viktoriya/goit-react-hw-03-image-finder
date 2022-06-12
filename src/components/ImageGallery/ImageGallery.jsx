@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import { ImageGalleryItem } from './ImageGalleryItem';
 import { List } from './ImageGallery.styled';
 
@@ -19,3 +20,8 @@ export function ImageGallery({ data, toggleModal }) {
     </List>
   );
 }
+
+ImageGallery.propTypes = {
+  data: PropTypes.array.isRequired,
+  toggleModal: PropTypes.func.isRequired,
+};

@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import { BtnLoad } from './Button.styled';
 
 export function ButtonNext({ getNextPage }) {
@@ -12,3 +13,7 @@ export function ButtonNext({ getNextPage }) {
     </BtnLoad>
   );
 }
+
+ButtonNext.propTypes = {
+  getNextPage: PropTypes.func.isRequired,
+};
