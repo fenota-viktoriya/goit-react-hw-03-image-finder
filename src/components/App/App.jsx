@@ -1,11 +1,13 @@
 import { PureComponent } from 'react';
 import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css';
 import { createPortal } from 'react-dom';
-import { Searchbar } from './Searchbar/Searchbar';
-import { ImageGallery } from './ImageGallery/ImageGallery';
-import { ServiceAPI } from './Api';
-import { Loader } from './Loader/Loader';
-import { Modals } from './Modal/Modal';
+import { Container } from './App.styled';
+import { Searchbar } from '../Searchbar/Searchbar';
+import { ImageGallery } from '../ImageGallery/ImageGallery';
+import { ServiceAPI } from '../Api';
+import { Loader } from '../Loader/Loader';
+import { Modals } from '../Modal/Modal';
+import { ButtonNext } from 'components/Button/Button';
 const modalRoot = document.querySelector('#modal-root');
 export class App extends PureComponent {
   state = {
@@ -33,7 +35,6 @@ export class App extends PureComponent {
   componentDidUpdate(prevProps, prevState) {
     if (prevState.text !== this.state.text) {
       this.setState({
-        loader: true,
         page: 1,
         images: [],
         modalImg: '',
@@ -44,14 +45,19 @@ export class App extends PureComponent {
       prevState.text !== this.state.text ||
       this.state.page !== prevState.page
     ) {
-      ServiceAPI(this.state.text, this.state.page).then(data =>
+      this.setState({ loader: true });
+      ServiceAPI(this.state.text, this.state.page).then(data => {
+        if (data.length < 1) {
+          alert('opps!');
+        }
+
         this.setState(prevState => {
           return {
             images: [...prevState.images, ...data],
             loader: false,
           };
-        })
-      );
+        });
+      });
     }
   }
 
@@ -62,7 +68,7 @@ export class App extends PureComponent {
   };
   render() {
     return (
-      <div>
+      <Container>
         {this.state.showModal &&
           createPortal(
             <Modals
@@ -72,7 +78,6 @@ export class App extends PureComponent {
             />,
             modalRoot
           )}
-        {this.state.loader && <Loader />}
 
         <Searchbar onSubmit={this.onSearchText} />
 
@@ -82,18 +87,11 @@ export class App extends PureComponent {
             toggleModal={this.toggleModal}
           />
         ) : null}
-
+        {this.state.loader && <Loader />}
         {this.state.images.length > 1 && (
-          <button
-            type="button"
-            onClick={() => {
-              this.getNextPage();
-            }}
-          >
-            next
-          </button>
+          <ButtonNext getNextPage={this.getNextPage} />
         )}
-      </div>
+      </Container>
     );
   }
 }

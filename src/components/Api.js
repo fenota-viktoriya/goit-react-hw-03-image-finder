@@ -9,7 +9,11 @@ axios.defaults.params = {
 };
 
 export async function ServiceAPI(q, page) {
-  const res = await axios.get(`?q=${q}&page=${page}`);
+  try {
+    const res = await axios.get(`?q=${q}&page=${page}`);
 
-  return res.data.hits;
+    return res.data.hits;
+  } catch (error) {
+    console.error(error);
+  }
 }

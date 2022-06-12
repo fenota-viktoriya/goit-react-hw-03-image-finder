@@ -2,7 +2,6 @@ import { ImageGalleryItem } from './ImageGalleryItem';
 import { List } from './ImageGallery.styled';
 
 export function ImageGallery({ data, toggleModal }) {
-  console.log(data);
   return (
     <List>
       {data.map(({ id, webformatURL, largeImageURL, tags }) => {
