@@ -13,7 +13,7 @@ export async function ServiceAPI(q, page) {
   try {
     const res = await axios.get(`?q=${q}&page=${page}`);
 
-    return res.data.hits;
+    return res.data;
   } catch (error) {
     console.error(error);
   }

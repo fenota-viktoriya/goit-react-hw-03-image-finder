@@ -20,6 +20,7 @@ export class App extends PureComponent {
     showModal: false,
     modalImg: '',
     tags: '',
+    totalHits: '',
   };
 
   componentDidUpdate(prevProps, prevState) {
@@ -30,19 +31,21 @@ export class App extends PureComponent {
         images: [],
         modalImg: '',
         tags: '',
+        totalHits: '',
       });
     }
     if (prevState.text !== text || page !== prevState.page) {
       this.setState({ loader: true });
       ServiceAPI(text, page).then(data => {
-        if (data.length < 1) {
+        if (data.hits.length < 1) {
           alert('opps, ничего не найдено!');
         }
 
         this.setState(prevState => {
           return {
-            images: [...prevState.images, ...data],
+            images: [...prevState.images, ...data.hits],
             loader: false,
+            totalHits: data.totalHits,
           };
         });
       });
@@ -68,7 +71,8 @@ export class App extends PureComponent {
   };
 
   render() {
-    const { modalImg, showModal, tags, images, loader } = this.state;
+    const { modalImg, showModal, tags, images, loader, totalHits, page } =
+      this.state;
     return (
       <Container>
         {showModal &&
@@ -85,7 +89,7 @@ export class App extends PureComponent {
 
         {loader && <Loader />}
 
-        {images.length > 11 && <ButtonNext getNextPage={this.getNextPage} />}
+        {totalHits > page * 12 && <ButtonNext getNextPage={this.getNextPage} />}
       </Container>
     );
   }
