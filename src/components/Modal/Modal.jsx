@@ -6,12 +6,12 @@ export class Modals extends PureComponent {
   componentDidMount() {
     const { closeModal } = this.props;
     window.addEventListener('keydown', closeModal);
-    document.body.classList.add('scroll');
+    document.body.style.overflow = 'hidden';
   }
   componentWillUnmount() {
     const { closeModal } = this.props;
     window.removeEventListener('keydown', closeModal);
-    document.body.classList.remove('scroll');
+    document.body.style.overflow = ' visible';
   }
   render() {
     const { tags, img, closeModal } = this.props;
