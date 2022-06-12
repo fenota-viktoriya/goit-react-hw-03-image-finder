@@ -10,6 +10,7 @@ import { Modals } from '../Modal';
 import { ButtonNext } from '../Button';
 
 const modalRoot = document.querySelector('#modal-root');
+const PER_PAGE = 12;
 
 export class App extends PureComponent {
   state = {
@@ -89,7 +90,9 @@ export class App extends PureComponent {
 
         {loader && <Loader />}
 
-        {totalHits > page * 12 && <ButtonNext getNextPage={this.getNextPage} />}
+        {totalHits > page * PER_PAGE && (
+          <ButtonNext getNextPage={this.getNextPage} />
+        )}
       </Container>
     );
   }
